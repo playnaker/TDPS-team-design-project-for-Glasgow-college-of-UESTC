@@ -8,7 +8,7 @@ team46：Fast&Furious
 
 configuration:
 
-1. 使用cube IDE 平台完成小车驱动，任务实现，中断等功能
+1. 使用cube IDE 平台完成小车驱动，任务实现，中断等功能。（不建议使用keil，很难，功能上CubeIDE = keil + CubeMX）
  
 2. 使用openMV实现边缘检测，颜色识别
 
@@ -24,6 +24,20 @@ configuration:
    有很多组都是临测试前几天把板子和openMV烧了，临时买是来不及的
    
 8. 上一条适用于所有元件
+
+
+文件注释：
+
+1. pseudo_codeV1.cpp是我之前用mbed格式写的伪代码，与最终成品实现逻辑无较大差别
+ 
+2. main.c是用Cube IDE写的主程序，Patio1的三个task都在里面
+ 
+3. power.c是队友大佬写的驱动函数，包括调节速度，转向，接收openMV的数据
+ 
+4. pin.txt是PIN脚备忘录，基于stm32f446
+ 
+5. 其他c文件都为Cube IDE自动编译而得，非常节省时间
+
 
 
 results and discussion for patio1:

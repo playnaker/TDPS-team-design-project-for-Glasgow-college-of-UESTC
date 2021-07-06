@@ -31,6 +31,7 @@ Inside the line_tracking() function, the speed of two motors are controlled by 2
 
 HAL_TIM_Base_Start_IT(&htim2);
 and task1 is finished. 
+
 ![image](https://user-images.githubusercontent.com/86994632/124536624-db1d2a80-de4a-11eb-8cf1-76dd1c7d2e72.png)
  
 
@@ -61,6 +62,7 @@ After crossing the bridge, the interrupt with uart6 will be triggered again to c
 As long as the front distance meets the set constant given_dis1, the function turning () will be called to force rover to turn to the direction of arc. When the error of direction is within the interval +1/-1, the function will break from loop body of turning () and enable the interrupt with timer2. Then, rover will move towards the arc with assistance of interrupt callback function line_tracking(), and stop by calling function stop() after crossing the arc in a few seconds.
 
 In task3, the duration for line patrol is set to be 10 seconds, which is adequate for rover to successfully cross the arc. After interrupt related to line patrol is stopped, the rover requires to stop by calling stop () function. In the stop () function, the duty cycle of both motors will be set to 0, and rover will stop immediately. This is the end of task3 and patio1.
+
 ![image](https://user-images.githubusercontent.com/86994632/124536692-fb4ce980-de4a-11eb-9de1-2fbc6d033d38.png)
 
  
@@ -102,16 +104,19 @@ The code of main program is constructed with 3 tasks, line patrol, crossing brid
 In task1, after switching on, the interrupt at pin13 is triggered, in which the duty cycle for each motor will be assigned. Then predefined timer2 is enabled, while interrupt of line tracking with timer2 is triggered simultaneously. Inside interrupt callback function of timer2, the line_tracking() function is called. After finishing line patrol task, the interrupt with pin function timer2 will be stopped before detecting front distance. 
 
 ![image](https://user-images.githubusercontent.com/86994632/124536591-d22c5900-de4a-11eb-9fa3-d1f8cdb78b87.png)
+
 ![image](https://user-images.githubusercontent.com/86994632/124536624-db1d2a80-de4a-11eb-8cf1-76dd1c7d2e72.png)
 
 In task2, before the rover is in position to move on the bridge, the front ultrasonic ranging module begins to work in the interrupt callback function get_distance() with pin function uart6. When the measured distance returned to main program is less than given_dis0, which is a preannounced constant, the ultrasonic ranging module will be disabled and the turning function turning (float s_angle) will be called. After turning to the direction of bridge, the loop inside turning (float s_angle) ends and the rover begins to go straight with constant speed.
 
 ![image](https://user-images.githubusercontent.com/86994632/124536660-eb350a00-de4a-11eb-9a0d-47aedbabedea.png)
+
 ![image](https://user-images.githubusercontent.com/86994632/124536663-ee2ffa80-de4a-11eb-9794-6d85b50f4295.png)
 
 In task3, after crossing the bridge, the interrupt with uart6 is enabled again to determine the front distance. When the measured distance returned to main program is less than given_dis1, which is a preannounced constant, the ultrasonic ranging module will be disabled and the turning function turning (float s_angle) will be called again. This time, the direction is towards the arc. When the direction is correct, the interrupt related to line patrol will be triggered, and the rover will stop in a period of time after crossing the arc.
 
 ![image](https://user-images.githubusercontent.com/86994632/124536688-f8ea8f80-de4a-11eb-8a96-9c2b98016d3d.png)
+
 ![image](https://user-images.githubusercontent.com/86994632/124536692-fb4ce980-de4a-11eb-9de1-2fbc6d033d38.png)
 
 From late May to the end of the project, I attended every test in the spot of patio1. Compared with simulation with computer, there exists a number of influence factors in the real situation, such as light intensity, temperature, limit capacity and voltage of batteries. In order to accelerate the program under test, I broke the main program into pieces and decreased the frequency of boundary detection. Meanwhile, I added several judging statements before the execution of each task, which enhanced the robustness of main program. 
